@@ -7,13 +7,9 @@ start-frontend:
 setup:
 	composer install
 	cp -n .env.example .env
-	php artisan key:gen --ansi
-	touch database/database.sqlite
-	php artisan migrate
-	php artisan db:seed
+	php artisan key:generate
 	npm ci
 	npm run build
-	make ide-helper
 
 migrate:
 	php artisan migrate
