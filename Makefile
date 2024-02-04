@@ -8,7 +8,7 @@ setup:
 	composer install
 	cp -n .env.example .env
 	php artisan key:generate
-	npm ci
+	npm install
 	npm run build
 
 migrate:
