@@ -6,7 +6,7 @@ start-frontend:
 
 setup:
 	composer install
-	php artisan key:gen --ansi
+	php artisan key:generate
 	touch database/database.sqlite
 	php artisan migrate
 	php artisan db:seed
