@@ -21,7 +21,7 @@ test:
 	php artisan test
 
 lint:
-	composer exec --verbose phpcs -- --standard=PSR12 routes
+	composer exec --verbose phpcs -- --standard=PSR12 app routes tests
 
 validate:
 	composer validate
