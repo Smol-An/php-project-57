@@ -7,12 +7,14 @@
 
         <title>{{ __('header.app_name') }}</title>
 
+        <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Nunito&display=swap" rel="stylesheet">
 
+        <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
-    <body>
+    <body class="font-sans antialiased>
         <div id="app">
             <header class="fixed w-full">
                 @include('layouts.header')
