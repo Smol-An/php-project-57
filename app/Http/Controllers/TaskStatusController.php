@@ -21,8 +21,7 @@ class TaskStatusController extends Controller
      */
     public function create()
     {
-        $taskStatus = new TaskStatus();
-        return view('task_status.create', compact('taskStatus'));
+        return view('task_status.create');
     }
 
     /**
@@ -31,7 +30,7 @@ class TaskStatusController extends Controller
     public function store(Request $request)
     {
         $data = $this->validate($request, [
-                'name' => 'required|unique:task_statuses',
+            'name' => 'required|unique:task_statuses',
             ], [
                 'name.required' => __('task_status.validation.required'),
                 'name.unique' => __('task_status.validation.unique'),
@@ -59,7 +58,7 @@ class TaskStatusController extends Controller
     public function update(Request $request, TaskStatus $taskStatus)
     {
         $data = $this->validate($request, [
-            'name' => 'required|unique:task_statuses,name' . $taskStatus->id,
+            'name' => 'required|unique:task_statuses,name,' . $taskStatus->id,
         ], [
             'name.required' => __('task_status.validation.required'),
             'name.unique' => __('task_status.validation.unique'),

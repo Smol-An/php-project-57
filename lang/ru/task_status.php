@@ -12,7 +12,7 @@ return [
         'delete_confirm' => 'Вы уверены?',
         'edit' => 'Изменить',
     ],
-        'create' => [
+    'create' => [
         'header' => 'Создать статус',
         'name' => 'Имя',
         'button' => 'Создать',

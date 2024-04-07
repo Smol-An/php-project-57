@@ -2,8 +2,8 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TaskStatusController;
-//use App\Http\Controllers\TaskController;
-//use App\Http\Controllers\LabelController;
+use App\Http\Controllers\TaskController;
+use App\Http\Controllers\LabelController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -33,4 +33,8 @@ Route::middleware('auth')->group(function () {
 
 require __DIR__ . '/auth.php';
 
-Route::resource('task_statuses', TaskStatusController::class);
+Route::resources([
+    'task_statuses' => TaskStatusController::class,
+    'tasks' => TaskController::class,
+    'labels' => LabelController::class,
+]);

@@ -2,7 +2,9 @@
 
 @section('content')
     <div class="grid col-span-full">
-        <h1 class="mb-5">{{ __('task_status.create.header') }}</h1>
+        <h1 class="mb-5">
+            {{ __('task_status.create.header') }}
+        </h1>
 
         {{ Form::open(['route' => 'task_statuses.store', 'class' => 'w-50']) }}
             <div class="flex flex-col">
