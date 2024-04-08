@@ -37,8 +37,7 @@ class LabelController extends Controller
             'name.unique' => __('label.validation.unique'),
         ]);
 
-        $label = new Label();
-        $label->fill($data);
+        $label = new Label($data);
         $label->save();
 
         flash(__('label.flash.store'))->success();

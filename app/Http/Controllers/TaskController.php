@@ -7,6 +7,7 @@ use App\Models\Task;
 use App\Models\TaskStatus;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class TaskController extends Controller
 {
@@ -46,8 +47,8 @@ class TaskController extends Controller
             'status_id.required' => __('task.validation.required'),
         ]);
 
-        $task = new Task();
-        $task->fill($data);
+        $task = new Task($data);
+        $task->fill(['created_by_id' => Auth::user()->id]);
         $task->save();
 
         flash(__('task.flash.store'))->success();
@@ -70,7 +71,7 @@ class TaskController extends Controller
         $taskStatuses = TaskStatus::pluck('name', 'id');
         $users = User::pluck('name', 'id');
         $labels = Label::pluck('name', 'id');
-        return view('task.edit', compact('taskStatuses', 'users', 'labels'));
+        return view('task.edit', compact('task', 'taskStatuses', 'users', 'labels'));
     }
 
     /**

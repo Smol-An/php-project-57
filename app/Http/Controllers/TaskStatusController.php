@@ -36,8 +36,7 @@ class TaskStatusController extends Controller
                 'name.unique' => __('task_status.validation.unique'),
             ]);
 
-        $taskStatus = new TaskStatus();
-        $taskStatus->fill($data);
+        $taskStatus = new TaskStatus($data);
         $taskStatus->save();
 
         flash(__('task_status.flash.store'))->success();
