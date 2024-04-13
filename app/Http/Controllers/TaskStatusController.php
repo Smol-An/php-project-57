@@ -7,6 +7,10 @@ use Illuminate\Http\Request;
 
 class TaskStatusController extends Controller
 {
+    public function __construct()
+    {
+        $this->authorizeResource(TaskStatus::class);
+    }
     /**
      * Display a listing of the resource.
      */
