@@ -3,6 +3,7 @@
 return [
     'index' => [
         'header' => 'Задачи',
+        'apply' => 'Применить',
         'create' => 'Создать задачу',
         'id' => 'ID',
         'status_id' => 'Статус',

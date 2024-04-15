@@ -8,6 +8,8 @@ use App\Models\TaskStatus;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Spatie\QueryBuilder\QueryBuilder;
+use Spatie\QueryBuilder\AllowedFilter;
 
 class TaskController extends Controller
 {
@@ -20,8 +22,19 @@ class TaskController extends Controller
      */
     public function index()
     {
-        $tasks = Task::paginate();
-        return view('task.index', compact('tasks'));
+        $tasks = QueryBuilder::for(Task::class)
+            ->allowedFilters([
+                AllowedFilter::exact('status_id'),
+                AllowedFilter::exact('created_by_id'),
+                AllowedFilter::exact('assigned_to_id'),
+            ])
+            ->orderBy('id')
+            ->paginate();
+
+        $taskStatusesById = TaskStatus::pluck('name', 'id');
+        $usersById = User::pluck('name', 'id');
+
+        return view('task.index', compact('tasks', 'taskStatusesById', 'usersById'));
     }
 
     /**
@@ -32,6 +45,7 @@ class TaskController extends Controller
         $taskStatuses = TaskStatus::pluck('name', 'id');
         $users = User::pluck('name', 'id');
         $labels = Label::pluck('name', 'id');
+
         return view('task.create', compact('taskStatuses', 'users', 'labels'));
     }
 
@@ -54,8 +68,8 @@ class TaskController extends Controller
         $task = new Task($data);
         $task->fill(['created_by_id' => Auth::user()->id]);
         $task->save();
-
         flash(__('task.flash.store'))->success();
+
         return redirect()->route('tasks.index');
     }
 
@@ -75,6 +89,7 @@ class TaskController extends Controller
         $taskStatuses = TaskStatus::pluck('name', 'id');
         $users = User::pluck('name', 'id');
         $labels = Label::pluck('name', 'id');
+
         return view('task.edit', compact('task', 'taskStatuses', 'users', 'labels'));
     }
 
@@ -96,8 +111,8 @@ class TaskController extends Controller
 
         $task->fill($data);
         $task->save();
-
         flash(__('task.flash.update'))->success();
+
         return redirect()->route('tasks.index');
     }
 
@@ -107,8 +122,8 @@ class TaskController extends Controller
     public function destroy(Task $task)
     {
         $task->delete();
-
         flash(__('task.flash.delete'))->success();
+
         return redirect()->route('tasks.index');
     }
 }

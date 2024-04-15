@@ -43,8 +43,8 @@ class LabelController extends Controller
 
         $label = new Label($data);
         $label->save();
-
         flash(__('label.flash.store'))->success();
+
         return redirect()->route('labels.index');
     }
 
@@ -71,8 +71,8 @@ class LabelController extends Controller
 
         $label->fill($data);
         $label->save();
-
         flash(__('label.flash.update'))->success();
+
         return redirect()->route('labels.index');
     }
 
@@ -87,8 +87,8 @@ class LabelController extends Controller
         }
 
         $label->delete();
-
         flash(__('label.flash.delete'))->success();
+
         return redirect()->route('labels.index');
     }
 }

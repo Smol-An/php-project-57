@@ -83,13 +83,15 @@ class TaskSeeder extends Seeder
         ];
 
         for ($i = 0; $i < count($tasks); $i++) {
-            Task::firstOrCreate([
-                'name' => $tasks[$i]['name'],
-                'description' => $tasks[$i]['description'],
-                'status_id' => TaskStatus::inRandomOrder()->first()->id,
-                'created_by_id' => User::inRandomOrder()->first()->id,
-                'assigned_to_id' => User::inRandomOrder()->first()->id,
-            ]);
+            if (!Task::firstWhere('name', $tasks[$i]['name'])) {
+                Task::create([
+                    'name' => $tasks[$i]['name'],
+                    'description' => $tasks[$i]['description'],
+                    'status_id' => TaskStatus::inRandomOrder()->first()->id,
+                    'created_by_id' => User::inRandomOrder()->first()->id,
+                    'assigned_to_id' => User::inRandomOrder()->first()->id,
+                ]);
+            }
         }
     }
 }

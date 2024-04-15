@@ -7,6 +7,24 @@
         </h1>
 
         <div class="w-full flex items-center">
+           <div>
+                {{ Form::open(['route' => 'tasks.index', 'method' => 'GET']) }}
+                    <div class="flex">
+                        <div>
+                            {{ Form::select('filter[status_id]', $taskStatusesById, null, ['class' => 'rounded border-gray-300', 'placeholder' => __('task.index.status_id')]) }}
+                        </div>
+                        <div>
+                            {{ Form::select('filter[created_by_id]', $usersById, null, ['class' => 'ml-2 rounded border-gray-300', 'placeholder' => __('task.index.created_by')]) }}
+                        </div>
+                        <div>
+                            {{ Form::select('filter[assigned_to_id]', $usersById, null, ['class' => 'ml-2 rounded border-gray-300', 'placeholder' => __('task.index.assigned_to')]) }}
+                        </div>
+                        <div>
+                            {{ Form::submit(__('task.index.apply'), ['class' => 'bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded ml-2']) }}
+                        </div>
+                    </div>
+                {{ Form::close() }}
+            </div>
             @auth
                 <div class="ml-auto">
                     <a href="{{ route('tasks.create') }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded ml-2">
