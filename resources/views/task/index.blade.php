@@ -11,13 +11,13 @@
                 {{ Form::open(['route' => 'tasks.index', 'method' => 'GET']) }}
                     <div class="flex">
                         <div>
-                            {{ Form::select('filter[status_id]', $taskStatusesById, null, ['class' => 'rounded border-gray-300', 'placeholder' => __('task.index.status_id')]) }}
+                            {{ Form::select('filter[status_id]', $taskStatusesById, Arr::get($filter, 'status_id'), ['class' => 'rounded border-gray-300', 'placeholder' => __('task.index.status_id')]) }}
                         </div>
                         <div>
-                            {{ Form::select('filter[created_by_id]', $usersById, null, ['class' => 'ml-2 rounded border-gray-300', 'placeholder' => __('task.index.created_by')]) }}
+                            {{ Form::select('filter[created_by_id]', $usersById, Arr::get($filter, 'created_by_id'), ['class' => 'ml-2 rounded border-gray-300', 'placeholder' => __('task.index.created_by')]) }}
                         </div>
                         <div>
-                            {{ Form::select('filter[assigned_to_id]', $usersById, null, ['class' => 'ml-2 rounded border-gray-300', 'placeholder' => __('task.index.assigned_to')]) }}
+                            {{ Form::select('filter[assigned_to_id]', $usersById, Arr::get($filter, 'assigned_to_id'), ['class' => 'ml-2 rounded border-gray-300', 'placeholder' => __('task.index.assigned_to')]) }}
                         </div>
                         <div>
                             {{ Form::submit(__('task.index.apply'), ['class' => 'bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded ml-2']) }}

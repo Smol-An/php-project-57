@@ -20,8 +20,9 @@ class TaskController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
+        $filter = $request->input('filter');
         $tasks = QueryBuilder::for(Task::class)
             ->allowedFilters([
                 AllowedFilter::exact('status_id'),
@@ -34,7 +35,7 @@ class TaskController extends Controller
         $taskStatusesById = TaskStatus::pluck('name', 'id');
         $usersById = User::pluck('name', 'id');
 
-        return view('task.index', compact('tasks', 'taskStatusesById', 'usersById'));
+        return view('task.index', compact('tasks', 'taskStatusesById', 'usersById', 'filter'));
     }
 
     /**
@@ -68,6 +69,10 @@ class TaskController extends Controller
         $task = new Task($data);
         $task->fill(['created_by_id' => Auth::user()->id]);
         $task->save();
+
+        $labels = $request->input('labels') ?? [];
+        $task->labels()->attach($labels);
+
         flash(__('task.flash.store'))->success();
 
         return redirect()->route('tasks.index');
@@ -111,6 +116,10 @@ class TaskController extends Controller
 
         $task->fill($data);
         $task->save();
+
+        $labels = $request->input('labels') ?? [];
+        $task->labels()->sync($labels);
+
         flash(__('task.flash.update'))->success();
 
         return redirect()->route('tasks.index');

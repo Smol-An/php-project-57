@@ -16,7 +16,7 @@ class LabelController extends Controller
      */
     public function index()
     {
-        $labels = Label::paginate();
+        $labels = Label::orderBy('id')->paginate();
         return view('label.index', compact('labels'));
     }
 
