@@ -8,6 +8,7 @@ use App\Models\TaskStatus;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Arr;
 use Spatie\QueryBuilder\QueryBuilder;
 use Spatie\QueryBuilder\AllowedFilter;
 
@@ -70,7 +71,7 @@ class TaskController extends Controller
         $task->fill(['created_by_id' => Auth::user()->id]);
         $task->save();
 
-        $labels = $request->input('labels') ?? [];
+        $labels = Arr::whereNotNull($request->input('labels') ?? []);
         $task->labels()->attach($labels);
 
         flash(__('task.flash.store'))->success();
@@ -117,7 +118,7 @@ class TaskController extends Controller
         $task->fill($data);
         $task->save();
 
-        $labels = $request->input('labels') ?? [];
+        $labels = Arr::whereNotNull($request->input('labels') ?? []);
         $task->labels()->sync($labels);
 
         flash(__('task.flash.update'))->success();
