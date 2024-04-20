@@ -1,14 +1,14 @@
 <?php
 
 return [
-    'confirmed' => ':attribute и подтверждение не совпадают',
+    'confirmed' => ':Attribute и подтверждение не совпадают',
     'email' => 'Поле :attribute должно быть действительным адресом электронной почты',
     'lowercase' => 'Поле :attribute должно быть в нижнем регистре',
     'max' => [
-        'string' => ':attribute должен иметь длину не более :max символов',
+        'string' => ':Attribute должен иметь длину не более :max символов',
     ],
     'min' => [
-        'string' => ':attribute должен иметь длину не менее :min символов',
+        'string' => ':Attribute должен иметь длину не менее :min символов',
     ],
     'required' => 'Это обязательное поле',
     'string' => 'Поле :attribute должно быть строкой',
