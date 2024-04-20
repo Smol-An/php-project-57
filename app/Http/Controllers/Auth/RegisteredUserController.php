@@ -37,7 +37,7 @@ class RegisteredUserController extends Controller
             'password' => ['required', 'confirmed', 'min:8', Rules\Password::defaults()],
             ],
             [
-            'password.min' => __('validation.min')
+            'password.min' => __('validation.min.string')
             ]
         );
 
