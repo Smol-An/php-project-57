@@ -66,7 +66,7 @@ class LabelControllerTest extends TestCase
         $this->seed(LabelSeeder::class);
         $user = User::factory()->create();
         $this->actingAs($user);
-        $label = Label::inRandomOrder()->first();
+        $label = Label::inRandomOrder()->firstOrFail();
         $response = $this->delete(route('labels.destroy', $label));
         $response->assertSessionHasNoErrors();
         $response->assertRedirect();

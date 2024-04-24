@@ -66,7 +66,7 @@ class TaskStatusControllerTest extends TestCase
         $this->seed(TaskStatusSeeder::class);
         $user = User::factory()->create();
         $this->actingAs($user);
-        $taskStatus = TaskStatus::inRandomOrder()->first();
+        $taskStatus = TaskStatus::inRandomOrder()->firstOrFail();
         $response = $this->delete(route('task_statuses.destroy', $taskStatus));
         $response->assertSessionHasNoErrors();
         $response->assertRedirect();
