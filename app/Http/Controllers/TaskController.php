@@ -67,8 +67,7 @@ class TaskController extends Controller
             'status_id.required' => __('task.validation.required'),
         ]);
 
-        $task = new Task($data);
-        $task->fill(['created_by_id' => Auth::user()->id]);
+        $task = Auth::user()->createdTasks()->create($data);
         $task->save();
 
         $labels = Arr::whereNotNull($request->input('labels') ?? []);

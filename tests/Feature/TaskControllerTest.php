@@ -33,7 +33,7 @@ class TaskControllerTest extends TestCase
         $user = User::factory()->create();
         $this->actingAs($user);
         $name = fake()->text();
-        $status_id = TaskStatus::inRandomOrder()->first()->id;
+        $status_id = TaskStatus::inRandomOrder()->firstOrFail()->id;
         $response = $this->post(route('tasks.store', compact('name', 'status_id')));
         $response->assertSessionHasNoErrors();
         $response->assertRedirect();
@@ -65,7 +65,7 @@ class TaskControllerTest extends TestCase
         $this->actingAs($user);
         $task = Task::inRandomOrder()->first();
         $name = fake()->text();
-        $status_id = TaskStatus::inRandomOrder()->first()->id;
+        $status_id = TaskStatus::inRandomOrder()->firstOrFail()->id;
         $response = $this->patch(route('tasks.update', $task), compact('name', 'status_id'));
         $response->assertSessionHasNoErrors();
         $response->assertRedirect();
@@ -77,7 +77,7 @@ class TaskControllerTest extends TestCase
         $this->seed();
         $user = User::factory()->create();
         $this->actingAs($user);
-        $task = Task::inRandomOrder()->first();
+        $task = Task::inRandomOrder()->firstOrFail();
         $response = $this->delete(route('tasks.destroy', $task));
         $response->assertForbidden();
         $this->assertDatabaseHas('tasks', ['id' => $task->id]);
