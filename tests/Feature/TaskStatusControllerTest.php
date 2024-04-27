@@ -53,7 +53,7 @@ class TaskStatusControllerTest extends TestCase
         $response->assertSessionHasNoErrors();
         $response->assertRedirect();
         $this->assertDatabaseHas('task_statuses', [
-            'id' => $taskStatus->id,
+            'id' => $taskStatus?->id,
             'name' => $body['name']
         ]);
     }

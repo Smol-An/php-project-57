@@ -10,5 +10,5 @@ abstract class TestCase extends BaseTestCase
     use CreatesApplication;
     use RefreshDatabase;
 
-    protected $seed = true;
+    protected bool $seed = true;
 }

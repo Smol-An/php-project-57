@@ -67,7 +67,7 @@ class TaskControllerTest extends TestCase
         $response->assertSessionHasNoErrors();
         $response->assertRedirect();
         $this->assertDatabaseHas('tasks', [
-            'id' => $task->id,
+            'id' => $task?->id,
             'name' => $body['name'],
             'status_id' => $body['status_id']
         ]);

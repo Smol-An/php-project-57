@@ -53,7 +53,7 @@ class LabelControllerTest extends TestCase
         $response->assertSessionHasNoErrors();
         $response->assertRedirect();
         $this->assertDatabaseHas('labels', [
-            'id' => $label->id,
+            'id' => $label?->id,
             'name' => $body['name']
         ]);
     }
