@@ -2,7 +2,6 @@
 
 namespace Tests\Feature;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use App\Models\User;
@@ -11,8 +10,6 @@ use App\Models\TaskStatus;
 
 class TaskControllerTest extends TestCase
 {
-    use RefreshDatabase;
-
     public function testIndex(): void
     {
         $response = $this->get(route('tasks.index'));
@@ -29,20 +26,20 @@ class TaskControllerTest extends TestCase
 
     public function testStore(): void
     {
-        $this->seed();
         $user = User::factory()->create();
         $this->actingAs($user);
-        $name = fake()->text();
-        $status_id = TaskStatus::inRandomOrder()->firstOrFail()->id;
-        $response = $this->post(route('tasks.store', compact('name', 'status_id')));
+        $body = [
+            'name' => fake()->text,
+            'status_id' => TaskStatus::inRandomOrder()->firstOrFail()->id
+        ];
+        $response = $this->post(route('tasks.store', $body));
         $response->assertSessionHasNoErrors();
         $response->assertRedirect();
-        $this->assertDatabaseHas('tasks', compact('name'));
+        $this->assertDatabaseHas('tasks', $body);
     }
 
     public function testShow(): void
     {
-        $this->seed();
         $task = Task::inRandomOrder()->first();
         $response = $this->get(route('tasks.show', $task));
         $response->assertOk();
@@ -50,7 +47,6 @@ class TaskControllerTest extends TestCase
 
     public function testEdit(): void
     {
-        $this->seed();
         $user = User::factory()->create();
         $this->actingAs($user);
         $task = Task::inRandomOrder()->first();
@@ -60,26 +56,36 @@ class TaskControllerTest extends TestCase
 
     public function testUpdate(): void
     {
-        $this->seed();
         $user = User::factory()->create();
         $this->actingAs($user);
         $task = Task::inRandomOrder()->first();
-        $name = fake()->text();
-        $status_id = TaskStatus::inRandomOrder()->firstOrFail()->id;
-        $response = $this->patch(route('tasks.update', $task), compact('name', 'status_id'));
+        $body = [
+            'name' => fake()->text,
+            'status_id' => TaskStatus::inRandomOrder()->firstOrFail()->id
+        ];
+        $response = $this->patch(route('tasks.update', $task), $body);
         $response->assertSessionHasNoErrors();
         $response->assertRedirect();
-        $this->assertDatabaseHas('tasks', compact('name'));
+        $this->assertDatabaseHas('tasks', [
+            'id' => $task->id,
+            'name' => $body['name'],
+            'status_id' => $body['status_id']
+        ]);
     }
 
     public function testDestroy(): void
     {
-        $this->seed();
         $user = User::factory()->create();
         $this->actingAs($user);
-        $task = Task::inRandomOrder()->firstOrFail();
+        $task = new Task([
+            'name' => fake()->text,
+            'status_id' => TaskStatus::inRandomOrder()->firstOrFail()->id,
+            'created_by_id' => $user->id
+        ]);
+        $task->save();
         $response = $this->delete(route('tasks.destroy', $task));
-        $response->assertForbidden();
-        $this->assertDatabaseHas('tasks', ['id' => $task->id]);
+        $response->assertSessionHasNoErrors();
+        $response->assertRedirect();
+        $this->assertDatabaseMissing('tasks', ['id' => $task->id]);
     }
 }

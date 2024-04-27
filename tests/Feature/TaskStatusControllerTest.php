@@ -2,17 +2,13 @@
 
 namespace Tests\Feature;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use App\Models\User;
 use App\Models\TaskStatus;
-use Database\Seeders\TaskStatusSeeder;
 
 class TaskStatusControllerTest extends TestCase
 {
-    use RefreshDatabase;
-
     public function testIndex(): void
     {
         $response = $this->get(route('task_statuses.index'));
@@ -31,16 +27,15 @@ class TaskStatusControllerTest extends TestCase
     {
         $user = User::factory()->create();
         $this->actingAs($user);
-        $name = fake()->text();
-        $response = $this->post(route('task_statuses.store', compact('name')));
+        $body = ['name' => fake()->text];
+        $response = $this->post(route('task_statuses.store', $body));
         $response->assertSessionHasNoErrors();
         $response->assertRedirect();
-        $this->assertDatabaseHas('task_statuses', compact('name'));
+        $this->assertDatabaseHas('task_statuses', $body);
     }
 
     public function testEdit(): void
     {
-        $this->seed(TaskStatusSeeder::class);
         $user = User::factory()->create();
         $this->actingAs($user);
         $taskStatus = TaskStatus::inRandomOrder()->first();
@@ -50,23 +45,25 @@ class TaskStatusControllerTest extends TestCase
 
     public function testUpdate(): void
     {
-        $this->seed(TaskStatusSeeder::class);
         $user = User::factory()->create();
         $this->actingAs($user);
         $taskStatus = TaskStatus::inRandomOrder()->first();
-        $name = fake()->text();
-        $response = $this->patch(route('task_statuses.update', $taskStatus), compact('name'));
+        $body = ['name' => fake()->text];
+        $response = $this->patch(route('task_statuses.update', $taskStatus), $body);
         $response->assertSessionHasNoErrors();
         $response->assertRedirect();
-        $this->assertDatabaseHas('task_statuses', compact('name'));
+        $this->assertDatabaseHas('task_statuses', [
+            'id' => $taskStatus->id,
+            'name' => $body['name']
+        ]);
     }
 
     public function testDestroy(): void
     {
-        $this->seed(TaskStatusSeeder::class);
         $user = User::factory()->create();
         $this->actingAs($user);
-        $taskStatus = TaskStatus::inRandomOrder()->firstOrFail();
+        $taskStatus = new TaskStatus(['name' => fake()->text]);
+        $taskStatus->save();
         $response = $this->delete(route('task_statuses.destroy', $taskStatus));
         $response->assertSessionHasNoErrors();
         $response->assertRedirect();

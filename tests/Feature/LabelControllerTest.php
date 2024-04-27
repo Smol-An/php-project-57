@@ -2,17 +2,13 @@
 
 namespace Tests\Feature;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use App\Models\User;
 use App\Models\Label;
-use Database\Seeders\LabelSeeder;
 
 class LabelControllerTest extends TestCase
 {
-    use RefreshDatabase;
-
     public function testIndex(): void
     {
         $response = $this->get(route('labels.index'));
@@ -31,16 +27,15 @@ class LabelControllerTest extends TestCase
     {
         $user = User::factory()->create();
         $this->actingAs($user);
-        $name = fake()->text();
-        $response = $this->post(route('labels.store', compact('name')));
+        $body = ['name' => fake()->text];
+        $response = $this->post(route('labels.store', $body));
         $response->assertSessionHasNoErrors();
         $response->assertRedirect();
-        $this->assertDatabaseHas('labels', compact('name'));
+        $this->assertDatabaseHas('labels', $body);
     }
 
     public function testEdit(): void
     {
-        $this->seed(LabelSeeder::class);
         $user = User::factory()->create();
         $this->actingAs($user);
         $label = Label::inRandomOrder()->first();
@@ -50,23 +45,25 @@ class LabelControllerTest extends TestCase
 
     public function testUpdate(): void
     {
-        $this->seed(LabelSeeder::class);
         $user = User::factory()->create();
         $this->actingAs($user);
         $label = Label::inRandomOrder()->first();
-        $name = fake()->text();
-        $response = $this->patch(route('labels.update', $label), compact('name'));
+        $body = ['name' => fake()->text];
+        $response = $this->patch(route('labels.update', $label), $body);
         $response->assertSessionHasNoErrors();
         $response->assertRedirect();
-        $this->assertDatabaseHas('labels', compact('name'));
+        $this->assertDatabaseHas('labels', [
+            'id' => $label->id,
+            'name' => $body['name']
+        ]);
     }
 
     public function testDestroy(): void
     {
-        $this->seed(LabelSeeder::class);
         $user = User::factory()->create();
         $this->actingAs($user);
-        $label = Label::inRandomOrder()->firstOrFail();
+        $label = new Label(['name' => fake()->text,]);
+        $label->save();
         $response = $this->delete(route('labels.destroy', $label));
         $response->assertSessionHasNoErrors();
         $response->assertRedirect();
