@@ -27,7 +27,7 @@ class LabelControllerTest extends TestCase
     {
         $user = User::factory()->create();
         $this->actingAs($user);
-        $body = ['name' => fake()->text];
+        $body = Label::factory()->make()->only('name');
         $response = $this->post(route('labels.store', $body));
         $response->assertSessionHasNoErrors();
         $response->assertRedirect();
@@ -48,7 +48,7 @@ class LabelControllerTest extends TestCase
         $user = User::factory()->create();
         $this->actingAs($user);
         $label = Label::inRandomOrder()->first();
-        $body = ['name' => fake()->text];
+        $body = Label::factory()->make()->only('name');
         $response = $this->patch(route('labels.update', $label), $body);
         $response->assertSessionHasNoErrors();
         $response->assertRedirect();
@@ -62,8 +62,7 @@ class LabelControllerTest extends TestCase
     {
         $user = User::factory()->create();
         $this->actingAs($user);
-        $label = new Label(['name' => fake()->text,]);
-        $label->save();
+        $label = Label::factory()->create();
         $response = $this->delete(route('labels.destroy', $label));
         $response->assertSessionHasNoErrors();
         $response->assertRedirect();

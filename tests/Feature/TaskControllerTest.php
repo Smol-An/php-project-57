@@ -28,10 +28,7 @@ class TaskControllerTest extends TestCase
     {
         $user = User::factory()->create();
         $this->actingAs($user);
-        $body = [
-            'name' => fake()->text,
-            'status_id' => TaskStatus::inRandomOrder()->firstOrFail()->id
-        ];
+        $body = Task::factory()->make()->only('name', 'status_id');
         $response = $this->post(route('tasks.store', $body));
         $response->assertSessionHasNoErrors();
         $response->assertRedirect();
@@ -59,10 +56,7 @@ class TaskControllerTest extends TestCase
         $user = User::factory()->create();
         $this->actingAs($user);
         $task = Task::inRandomOrder()->first();
-        $body = [
-            'name' => fake()->text,
-            'status_id' => TaskStatus::inRandomOrder()->firstOrFail()->id
-        ];
+        $body = Task::factory()->make()->only('name', 'status_id');
         $response = $this->patch(route('tasks.update', $task), $body);
         $response->assertSessionHasNoErrors();
         $response->assertRedirect();
@@ -77,12 +71,7 @@ class TaskControllerTest extends TestCase
     {
         $user = User::factory()->create();
         $this->actingAs($user);
-        $task = new Task([
-            'name' => fake()->text,
-            'status_id' => TaskStatus::inRandomOrder()->firstOrFail()->id,
-            'created_by_id' => $user->id
-        ]);
-        $task->save();
+        $task = Task::factory()->for($user, 'createdBy')->create();
         $response = $this->delete(route('tasks.destroy', $task));
         $response->assertSessionHasNoErrors();
         $response->assertRedirect();
