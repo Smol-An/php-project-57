@@ -57,8 +57,8 @@ class TaskController extends Controller
     public function store(Request $request)
     {
         $data = $this->validate($request, [
-            'name' => 'required|unique:tasks',
-            'description' => 'nullable',
+            'name' => 'required|max:255|unique:tasks',
+            'description' => 'string|max:500|nullable',
             'status_id' => 'required',
             'assigned_to_id' => 'nullable',
         ], [
@@ -104,8 +104,8 @@ class TaskController extends Controller
     public function update(Request $request, Task $task)
     {
         $data = $this->validate($request, [
-            'name' => 'required|unique:tasks,name,' . $task->id,
-            'description' => 'nullable',
+            'name' => 'required|max:255|unique:tasks,name,' . $task->id,
+            'description' => 'string|max:500|nullable',
             'status_id' => 'required',
             'assigned_to_id' => 'nullable',
         ], [
